@@ -1,171 +1,138 @@
 const mongoose =
     require("mongoose");
 
+
+// ==============================
+// ROAD SCHEMA
+// ==============================
+
 const roadSchema =
-    new mongoose.Schema(
-        {
+    new mongoose.Schema({
 
-            osmId: {
-                type: String,
-                required: true,
-                unique: true
-            },
+        // =========================
+        // BASIC ROAD INFORMATION
+        // =========================
 
-            name: {
-                type: String,
-                default: ""
-            },
-
-            highway: {
-                type: String,
-                default: ""
-            },
-
-            ref: {
-                type: String,
-                default: ""
-            },
-
-            roadType: {
-                type: String,
-                default: ""
-            },
-
-            surface: {
-                type: String,
-                default: ""
-            },
-
-            lengthKm: {
-                type: Number,
-                default: 0
-            },
-
-            lanes: {
-                type: Number,
-                default: null
-            },
-
-            oneway: {
-                type: Boolean,
-                default: false
-            },
-
-            bridge: {
-                type: Boolean,
-                default: false
-            },
-
-            tunnel: {
-                type: Boolean,
-                default: false
-            },
-
-            elevationM: {
-                type: Number,
-                default: 0
-            },
-
-            slopeDeg: {
-                type: Number,
-                default: 0
-            },
-
-            aspectDeg: {
-                type: Number,
-                default: 0
-            },
-
-            rainfall24hMm: {
-                type: Number,
-                default: 0
-            },
-
-            rainfall72hMm: {
-                type: Number,
-                default: 0
-            },
-
-            rainfall7dMm: {
-                type: Number,
-                default: 0
-            },
-
-            landslideCount5km: {
-                type: Number,
-                default: 0
-            },
-
-            nearestLandslideKm: {
-                type: Number,
-                default: null
-            },
-
-            floodExposure: {
-                type: Number,
-                default: 0
-            },
-
-            riskScore: {
-                type: Number,
-                default: 0
-            },
-
-            riskLevel: {
-                type: String,
-                enum: [
-                    "LOW",
-                    "MEDIUM",
-                    "HIGH"
-                ],
-                default: "LOW"
-            },
-
-            accessibilityScore: {
-                type: Number,
-                default: 100
-            },
-
-            status: {
-                type: String,
-                enum: [
-                    "OPEN",
-                    "RESTRICTED",
-                    "BLOCKED"
-                ],
-                default: "OPEN"
-            },
-
-            geometry: {
-                type: {
-                    type: String,
-                    enum: [
-                        "LineString"
-                    ],
-                    default: "LineString"
-                },
-
-                coordinates: {
-                    type: [
-                        [
-                            Number
-                        ]
-                    ],
-                    default: []
-                }
-            }
+        osmId: {
+            type: String
         },
 
-        {
-            timestamps: true
-        }
-    );
+        name: {
+            type: String
+        },
 
-roadSchema.index(
-    {
-        geometry: "2dsphere"
-    }
-);
+        highway: {
+            type: String
+        },
+
+        ref: {
+            type: String
+        },
+
+        roadType: {
+            type: String
+        },
+
+        surface: {
+            type: String
+        },
+
+        lengthKm: {
+            type: Number,
+
+            min: 0
+        },
+
+        lanes: {
+            type: Number,
+
+            min: 1
+        },
+
+        oneway: {
+            type: Boolean,
+
+            default: false
+        },
+
+        bridge: {
+            type: Boolean,
+
+            default: false
+        },
+
+        tunnel: {
+            type: Boolean,
+
+            default: false
+        },
+
+        // =========================
+        // ROAD STATUS
+        // =========================
+
+        accessibilityScore: {
+            type: Number,
+
+            min: 0,
+
+            max: 100
+        },
+
+        status: {
+
+            type: String,
+
+            enum: [
+                "OPEN",
+                "RESTRICTED",
+                "BLOCKED"
+            ],
+
+            default: "OPEN"
+        },
+
+        // =========================
+        // ROAD GEOMETRY
+        // =========================
+
+        geometry: {
+
+            type: {
+
+                type: String,
+
+                enum: [
+                    "LineString"
+                ]
+            },
+
+            coordinates: {
+                type: [
+                    [
+                        Number
+                    ]
+                ]
+            }
+        }
+
+    }, {
+
+        timestamps:
+            true
+    });
+
+
+// ==============================
+// GEO INDEX
+// ==============================
+
+roadSchema.index({
+
+    geometry:
+        "2dsphere"
+});
+
 
 module.exports =
     mongoose.model(

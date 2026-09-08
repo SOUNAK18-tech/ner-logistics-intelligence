@@ -68,6 +68,11 @@ const errorsController =
         "./controllers/errors"
     );
 
+const riskRoutes =
+    require(
+        "./routes/riskRoutes"
+    );
+
 
 // ==============================
 // APP
@@ -145,6 +150,11 @@ app.use(
 app.use(
     "/api/settings",
     settingsRouter
+);
+
+app.use(
+    "/api/risk",
+    riskRoutes
 );
 
 
