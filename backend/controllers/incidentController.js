@@ -2,9 +2,9 @@ const Incident =
     require("../models/Incident");
 
 
-// =========================
-// GET ALL INCIDENTS
-// =========================
+// ==============================
+// GET ALL
+// ==============================
 
 const getAllIncidents =
     async (
@@ -15,7 +15,16 @@ const getAllIncidents =
         try {
 
             const incidents =
-                await Incident.find();
+                await Incident.find()
+
+                .populate(
+                    "roadId"
+                )
+
+                .sort({
+                    createdAt: -1
+                });
+
 
             res.status(200).json({
 
@@ -23,6 +32,7 @@ const getAllIncidents =
 
                 data:
                     incidents
+
             });
 
         } catch (error) {
@@ -33,14 +43,17 @@ const getAllIncidents =
 
                 message:
                     error.message
+
             });
+
         }
+
     };
 
 
-// =========================
-// GET INCIDENT BY ID
-// =========================
+// ==============================
+// GET BY ID
+// ==============================
 
 const getIncidentById =
     async (
@@ -53,7 +66,12 @@ const getIncidentById =
             const incident =
                 await Incident.findById(
                     req.params.id
+                )
+
+                .populate(
+                    "roadId"
                 );
+
 
             if (!incident) {
 
@@ -63,8 +81,11 @@ const getIncidentById =
 
                     message:
                         "Incident not found"
+
                 });
+
             }
+
 
             res.status(200).json({
 
@@ -72,6 +93,7 @@ const getIncidentById =
 
                 data:
                     incident
+
             });
 
         } catch (error) {
@@ -82,14 +104,17 @@ const getIncidentById =
 
                 message:
                     error.message
+
             });
+
         }
+
     };
 
 
-// =========================
-// CREATE INCIDENT
-// =========================
+// ==============================
+// CREATE
+// ==============================
 
 const createIncident =
     async (
@@ -100,12 +125,10 @@ const createIncident =
         try {
 
             const incident =
-                new Incident(
+                await Incident.create(
                     req.body
                 );
 
-            const savedIncident =
-                await incident.save();
 
             res.status(201).json({
 
@@ -115,7 +138,8 @@ const createIncident =
                     "Incident created successfully",
 
                 data:
-                    savedIncident
+                    incident
+
             });
 
         } catch (error) {
@@ -126,14 +150,17 @@ const createIncident =
 
                 message:
                     error.message
+
             });
+
         }
+
     };
 
 
-// =========================
-// UPDATE INCIDENT
-// =========================
+// ==============================
+// UPDATE
+// ==============================
 
 const updateIncident =
     async (
@@ -151,11 +178,16 @@ const updateIncident =
                     req.body,
 
                     {
+
                         new: true,
 
-                        runValidators: true
+                        runValidators:
+                            true
+
                     }
+
                 );
+
 
             if (!incident) {
 
@@ -165,18 +197,19 @@ const updateIncident =
 
                     message:
                         "Incident not found"
+
                 });
+
             }
+
 
             res.status(200).json({
 
                 success: true,
 
-                message:
-                    "Incident updated successfully",
-
                 data:
                     incident
+
             });
 
         } catch (error) {
@@ -187,14 +220,17 @@ const updateIncident =
 
                 message:
                     error.message
+
             });
+
         }
+
     };
 
 
-// =========================
-// DELETE INCIDENT
-// =========================
+// ==============================
+// DELETE
+// ==============================
 
 const deleteIncident =
     async (
@@ -206,8 +242,11 @@ const deleteIncident =
 
             const incident =
                 await Incident.findByIdAndDelete(
+
                     req.params.id
+
                 );
+
 
             if (!incident) {
 
@@ -217,8 +256,11 @@ const deleteIncident =
 
                     message:
                         "Incident not found"
+
                 });
+
             }
+
 
             res.status(200).json({
 
@@ -226,6 +268,7 @@ const deleteIncident =
 
                 message:
                     "Incident deleted successfully"
+
             });
 
         } catch (error) {
@@ -236,8 +279,11 @@ const deleteIncident =
 
                 message:
                     error.message
+
             });
+
         }
+
     };
 
 

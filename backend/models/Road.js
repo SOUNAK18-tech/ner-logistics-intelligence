@@ -9,10 +9,6 @@ const mongoose =
 const roadSchema =
     new mongoose.Schema({
 
-        // =========================
-        // BASIC ROAD INFORMATION
-        // =========================
-
         osmId: {
             type: String
         },
@@ -67,10 +63,6 @@ const roadSchema =
             default: false
         },
 
-        // =========================
-        // ROAD STATUS
-        // =========================
-
         accessibilityScore: {
             type: Number,
 
@@ -80,7 +72,6 @@ const roadSchema =
         },
 
         status: {
-
             type: String,
 
             enum: [
@@ -91,10 +82,6 @@ const roadSchema =
 
             default: "OPEN"
         },
-
-        // =========================
-        // ROAD GEOMETRY
-        // =========================
 
         geometry: {
 
@@ -108,18 +95,21 @@ const roadSchema =
             },
 
             coordinates: {
+
                 type: [
                     [
                         Number
                     ]
                 ]
+
             }
+
         }
 
     }, {
 
-        timestamps:
-            true
+        timestamps: true
+
     });
 
 
@@ -131,6 +121,7 @@ roadSchema.index({
 
     geometry:
         "2dsphere"
+
 });
 
 

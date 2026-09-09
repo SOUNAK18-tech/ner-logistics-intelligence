@@ -1,40 +1,57 @@
 const mongoose =
     require("mongoose");
 
+
 const settingSchema =
-    new mongoose.Schema(
-        {
+    new mongoose.Schema({
 
-            language: {
-                type: String,
-                default: "English"
-            },
+        language: {
 
-            notificationsEnabled: {
-                type: Boolean,
-                default: true
-            },
+            type: String,
 
-            emailAlerts: {
-                type: Boolean,
-                default: true
-            },
+            default:
+                "English"
 
-            smsAlerts: {
-                type: Boolean,
-                default: false
-            },
-
-            highRiskAlerts: {
-                type: Boolean,
-                default: true
-            }
         },
 
-        {
-            timestamps: true
+        notificationsEnabled: {
+
+            type: Boolean,
+
+            default: true
+
+        },
+
+        emailAlerts: {
+
+            type: Boolean,
+
+            default: true
+
+        },
+
+        smsAlerts: {
+
+            type: Boolean,
+
+            default: false
+
+        },
+
+        highRiskAlerts: {
+
+            type: Boolean,
+
+            default: true
+
         }
-    );
+
+    }, {
+
+        timestamps: true
+
+    });
+
 
 module.exports =
     mongoose.model(

@@ -11,67 +11,55 @@ dns.setServers([
 const express =
     require("express");
 
-const {
-    default: mongoose
-} =
+const mongoose =
     require("mongoose");
 
 const cors =
     require("cors");
 
+const cookieParser =
+    require("cookie-parser");
 
+const helmet =
+    require("helmet");
 
 
 // ==============================
-// LOCAL MODULES
+// ROUTES
 // ==============================
 
-const roadsRouter =
-    require(
-        "./routes/roadRoutes"
-    );
+const authRoutes =
+    require("./routes/authRoutes");
 
+const roadRoutes =
+    require("./routes/roadRoutes");
 
-const vehiclesRouter =
-    require(
-        "./routes/vehicleRoutes"
-    );
+const vehicleRoutes =
+    require("./routes/vehicleRoutes");
 
+const deliveryRoutes =
+    require("./routes/deliveryRoutes");
 
-const deliveriesRouter =
-    require(
-        "./routes/deliveryRoutes"
-    );
+const incidentRoutes =
+    require("./routes/incidentRoutes");
 
+const alertRoutes =
+    require("./routes/alertRoutes");
 
-const incidentsRouter =
-    require(
-        "./routes/incidentRoutes"
-    );
+const settingRoutes =
+    require("./routes/settingRoutes");
 
+const landslideRoutes =
+    require("./routes/landslideRoutes");
 
-const alertsRouter =
-    require(
-        "./routes/alertRoutes"
-    );
+const routeRiskRoutes =
+    require("./routes/routeRiskRoutes");
 
-
-
-const settingsRouter =
-    require(
-        "./routes/settingRoutes"
-    );
-
+const geocodeRoutes =
+    require("./routes/geocodeRoutes");
 
 const errorsController =
-    require(
-        "./controllers/errors"
-    );
-
-const riskRoutes =
-    require(
-        "./routes/riskRoutes"
-    );
+    require("./controllers/errors");
 
 
 // ==============================
@@ -83,8 +71,78 @@ const app =
 
 
 // ==============================
-// MIDDLEWARE
+// SECURITY
 // ==============================
+
+app.use(
+    helmet()
+);
+
+
+// ==============================
+// CORS
+// ==============================
+
+const allowedOrigins = [
+
+    process.env.FRONTEND_URL,
+
+    "http://localhost:5173",
+
+    "http://localhost:5174",
+
+    "http://127.0.0.1:5173",
+
+    "http://127.0.0.1:5174"
+
+].filter(Boolean);
+
+
+app.use(
+    cors({
+
+        origin: function (
+            origin,
+            callback
+        ) {
+
+            if (
+                !origin ||
+                allowedOrigins.includes(origin)
+            ) {
+
+                return callback(
+                    null,
+                    true
+                );
+
+            }
+
+
+            return callback(
+                new Error(
+                    "Not allowed by CORS"
+                )
+            );
+
+        },
+
+        credentials:
+            true
+
+    })
+);
+
+
+// ==============================
+// REQUEST MIDDLEWARE
+// ==============================
+
+app.use(
+    express.json({
+        limit: "2mb"
+    })
+);
 
 app.use(
     express.urlencoded({
@@ -92,24 +150,52 @@ app.use(
     })
 );
 
-
 app.use(
-    express.json()
+    cookieParser()
 );
 
 
+// ==============================
+// ROOT
+// ==============================
+
+app.get(
+    "/",
+    (req, res) => {
+
+        res.status(200).json({
+
+            success:
+                true,
+
+            message:
+                "SIH26002 Logistics Intelligence Backend is running"
+
+        });
+
+    }
+);
 
 
+// ==============================
+// HEALTH CHECK
+// ==============================
 
-app.use(
-    cors({
+app.get(
+    "/health",
+    (req, res) => {
 
-        origin:
-            process.env.FRONTEND_URL,
+        res.status(200).json({
 
-        credentials:
-            true
-    })
+            success:
+                true,
+
+            message:
+                "Backend is healthy"
+
+        });
+
+    }
 );
 
 
@@ -118,43 +204,53 @@ app.use(
 // ==============================
 
 app.use(
-    "/api/roads",
-    roadsRouter
+    "/api/auth",
+    authRoutes
 );
 
+app.use(
+    "/api/roads",
+    roadRoutes
+);
 
 app.use(
     "/api/vehicles",
-    vehiclesRouter
+    vehicleRoutes
 );
-
 
 app.use(
     "/api/deliveries",
-    deliveriesRouter
+    deliveryRoutes
 );
-
 
 app.use(
     "/api/incidents",
-    incidentsRouter
+    incidentRoutes
 );
-
 
 app.use(
     "/api/alerts",
-    alertsRouter
+    alertRoutes
 );
-
 
 app.use(
     "/api/settings",
-    settingsRouter
+    settingRoutes
 );
 
 app.use(
-    "/api/risk",
-    riskRoutes
+    "/api/landslide",
+    landslideRoutes
+);
+
+app.use(
+    "/api/route-risk",
+    routeRiskRoutes
+);
+
+app.use(
+    "/api/geocode",
+    geocodeRoutes
 );
 
 
@@ -165,6 +261,11 @@ app.use(
 app.use(
     errorsController.pageNotFound
 );
+
+
+// ==============================
+// ERROR HANDLER
+// ==============================
 
 app.use(
     errorsController.handleError
@@ -177,20 +278,21 @@ app.use(
 
 const PORT =
     process.env.PORT ||
-    3001;
+    1710;
 
-
-const DB_PATH =
+const MONGO_URL =
     process.env.MONGO_URL;
 
 
 mongoose
-    .connect(DB_PATH)
+    .connect(
+        MONGO_URL
+    )
 
     .then(() => {
 
         console.log(
-            "Connected to Mongo"
+            "Connected to MongoDB"
         );
 
 
@@ -199,8 +301,9 @@ mongoose
             () => {
 
                 console.log(
-                    `Server running on address http://localhost:${PORT}`
+                    `Server running on http://localhost:${PORT}`
                 );
+
             }
         );
 
@@ -208,8 +311,9 @@ mongoose
 
     .catch((error) => {
 
-        console.log(
-            "Error while connecting to Mongo:",
+        console.error(
+            "Error while connecting to MongoDB:",
             error
         );
+
     });

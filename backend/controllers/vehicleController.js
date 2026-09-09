@@ -2,94 +2,9 @@ const Vehicle =
     require("../models/Vehicle");
 
 
-// =========================
-// GET ALL VEHICLES
-// =========================
-
-const getAllVehicles =
-    async (
-        req,
-        res
-    ) => {
-
-        try {
-
-            const vehicles =
-                await Vehicle.find();
-
-            res.status(200).json({
-
-                success: true,
-
-                data:
-                    vehicles
-            });
-
-        } catch (error) {
-
-            res.status(500).json({
-
-                success: false,
-
-                message:
-                    error.message
-            });
-        }
-    };
-
-
-// =========================
-// GET VEHICLE BY ID
-// =========================
-
-const getVehicleById =
-    async (
-        req,
-        res
-    ) => {
-
-        try {
-
-            const vehicle =
-                await Vehicle.findById(
-                    req.params.id
-                );
-
-            if (!vehicle) {
-
-                return res.status(404).json({
-
-                    success: false,
-
-                    message:
-                        "Vehicle not found"
-                });
-            }
-
-            res.status(200).json({
-
-                success: true,
-
-                data:
-                    vehicle
-            });
-
-        } catch (error) {
-
-            res.status(500).json({
-
-                success: false,
-
-                message:
-                    error.message
-            });
-        }
-    };
-
-
-// =========================
-// CREATE VEHICLE
-// =========================
+// ==============================
+// CREATE
+// ==============================
 
 const createVehicle =
     async (
@@ -100,22 +15,18 @@ const createVehicle =
         try {
 
             const vehicle =
-                new Vehicle(
+                await Vehicle.create(
                     req.body
                 );
 
-            const savedVehicle =
-                await vehicle.save();
 
             res.status(201).json({
 
                 success: true,
 
-                message:
-                    "Vehicle created successfully",
-
                 data:
-                    savedVehicle
+                    vehicle
+
             });
 
         } catch (error) {
@@ -126,14 +37,61 @@ const createVehicle =
 
                 message:
                     error.message
+
             });
+
         }
+
     };
 
 
-// =========================
-// UPDATE VEHICLE
-// =========================
+// ==============================
+// GET ALL
+// ==============================
+
+const getVehicles =
+    async (
+        req,
+        res
+    ) => {
+
+        try {
+
+            const vehicles =
+                await Vehicle.find();
+
+
+            res.status(200).json({
+
+                success: true,
+
+                count:
+                    vehicles.length,
+
+                data:
+                    vehicles
+
+            });
+
+        } catch (error) {
+
+            res.status(500).json({
+
+                success: false,
+
+                message:
+                    error.message
+
+            });
+
+        }
+
+    };
+
+
+// ==============================
+// UPDATE
+// ==============================
 
 const updateVehicle =
     async (
@@ -145,13 +103,22 @@ const updateVehicle =
 
             const vehicle =
                 await Vehicle.findByIdAndUpdate(
+
                     req.params.id,
+
                     req.body,
+
                     {
+
                         new: true,
-                        runValidators: true
+
+                        runValidators:
+                            true
+
                     }
+
                 );
+
 
             if (!vehicle) {
 
@@ -161,18 +128,19 @@ const updateVehicle =
 
                     message:
                         "Vehicle not found"
+
                 });
+
             }
+
 
             res.status(200).json({
 
                 success: true,
 
-                message:
-                    "Vehicle updated successfully",
-
                 data:
                     vehicle
+
             });
 
         } catch (error) {
@@ -183,14 +151,17 @@ const updateVehicle =
 
                 message:
                     error.message
+
             });
+
         }
+
     };
 
 
-// =========================
-// DELETE VEHICLE
-// =========================
+// ==============================
+// DELETE
+// ==============================
 
 const deleteVehicle =
     async (
@@ -202,8 +173,11 @@ const deleteVehicle =
 
             const vehicle =
                 await Vehicle.findByIdAndDelete(
+
                     req.params.id
+
                 );
+
 
             if (!vehicle) {
 
@@ -213,8 +187,11 @@ const deleteVehicle =
 
                     message:
                         "Vehicle not found"
+
                 });
+
             }
+
 
             res.status(200).json({
 
@@ -222,6 +199,7 @@ const deleteVehicle =
 
                 message:
                     "Vehicle deleted successfully"
+
             });
 
         } catch (error) {
@@ -232,18 +210,19 @@ const deleteVehicle =
 
                 message:
                     error.message
+
             });
+
         }
+
     };
 
 
 module.exports = {
 
-    getAllVehicles,
-
-    getVehicleById,
-
     createVehicle,
+
+    getVehicles,
 
     updateVehicle,
 

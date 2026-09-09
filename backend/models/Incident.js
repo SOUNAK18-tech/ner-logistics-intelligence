@@ -1,101 +1,134 @@
 const mongoose =
     require("mongoose");
 
+
 const incidentSchema =
-    new mongoose.Schema(
-        {
+    new mongoose.Schema({
 
-            type: {
-                type: String,
-                enum: [
-                    "LANDSLIDE",
-                    "FLOOD",
-                    "ROAD_DAMAGE",
-                    "BRIDGE_DAMAGE",
-                    "ACCIDENT",
-                    "BLOCKAGE",
-                    "OTHER"
-                ],
-                required: true
-            },
+        type: {
 
-            severity: {
-                type: String,
-                enum: [
-                    "LOW",
-                    "MEDIUM",
-                    "HIGH",
-                    "CRITICAL"
-                ],
-                default: "MEDIUM"
-            },
+            type: String,
 
-            description: {
-                type: String,
-                default: ""
-            },
+            enum: [
+                "LANDSLIDE",
+                "FLOOD",
+                "ROAD_DAMAGE",
+                "BRIDGE_DAMAGE",
+                "ACCIDENT",
+                "BLOCKAGE",
+                "OTHER"
+            ],
 
-            location: {
-                type: {
-                    type: String,
-                    enum: [
-                        "Point"
-                    ],
-                    default: "Point"
-                },
+            required: true
 
-                coordinates: {
-                    type: [
-                        Number
-                    ],
-                    default: [
-                        0,
-                        0
-                    ]
-                }
-            },
-
-            roadId: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: "Road",
-                default: null
-            },
-
-            photoUrl: {
-                type: String,
-                default: ""
-            },
-
-            reportedBy: {
-                type: String,
-                default: ""
-            },
-
-            verified: {
-                type: Boolean,
-                default: false
-            },
-
-            status: {
-                type: String,
-                enum: [
-                    "ACTIVE",
-                    "RESOLVED"
-                ],
-                default: "ACTIVE"
-            }
         },
 
-        {
-            timestamps: true
-        }
-    );
+        severity: {
 
-incidentSchema.index(
-    {
-        location: "2dsphere"
-    }
-);
+            type: String,
+
+            enum: [
+                "LOW",
+                "MEDIUM",
+                "HIGH",
+                "CRITICAL"
+            ],
+
+            required: true
+
+        },
+
+        description: {
+
+            type: String,
+
+            required: true
+
+        },
+
+        location: {
+
+            type: {
+
+                type: String,
+
+                enum: [
+                    "Point"
+                ],
+
+                required: true
+
+            },
+
+            coordinates: {
+
+                type: [
+                    Number
+                ],
+
+                required: true
+
+            }
+
+        },
+
+        roadId: {
+
+            type: mongoose.Schema.Types.ObjectId,
+
+            ref:
+                "Road"
+
+        },
+
+        photoUrl: {
+
+            type: String
+
+        },
+
+        reportedBy: {
+
+            type: String
+
+        },
+
+        verified: {
+
+            type: Boolean,
+
+            default: false
+
+        },
+
+        status: {
+
+            type: String,
+
+            enum: [
+                "ACTIVE",
+                "RESOLVED"
+            ],
+
+            default:
+                "ACTIVE"
+
+        }
+
+    }, {
+
+        timestamps: true
+
+    });
+
+
+incidentSchema.index({
+
+    location:
+        "2dsphere"
+
+});
+
 
 module.exports =
     mongoose.model(

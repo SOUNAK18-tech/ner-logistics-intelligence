@@ -1,31 +1,34 @@
 const express =
     require("express");
 
+const {
+
+    createVehicle,
+
+    getVehicles,
+
+    updateVehicle,
+
+    deleteVehicle
+
+} =
+    require(
+        "../controllers/vehicleController"
+    );
+
+
 const router =
     express.Router();
 
-const {
-    getAllVehicles,
-    getVehicleById,
-    createVehicle,
-    updateVehicle,
-    deleteVehicle
-} =
-    require("../controllers/vehicleController");
-
-router.get(
-    "/",
-    getAllVehicles
-);
-
-router.get(
-    "/:id",
-    getVehicleById
-);
 
 router.post(
     "/",
     createVehicle
+);
+
+router.get(
+    "/",
+    getVehicles
 );
 
 router.put(
@@ -37,6 +40,7 @@ router.delete(
     "/:id",
     deleteVehicle
 );
+
 
 module.exports =
     router;

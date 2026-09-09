@@ -1,78 +1,79 @@
 const mongoose =
     require("mongoose");
 
+
+// ==============================
+// ALERT SCHEMA
+// ==============================
+
 const alertSchema =
-    new mongoose.Schema(
-        {
+    new mongoose.Schema({
 
-            type: {
-                type: String,
-                enum: [
-                    "ROAD_BLOCKED",
-                    "HIGH_RISK",
-                    "DELIVERY_DELAY",
-                    "VEHICLE_DELAY",
-                    "WEATHER",
-                    "INCIDENT",
-                    "OTHER"
-                ],
-                required: true
-            },
+        latitude: {
 
-            severity: {
-                type: String,
-                enum: [
-                    "LOW",
-                    "MEDIUM",
-                    "HIGH",
-                    "CRITICAL"
-                ],
-                default: "MEDIUM"
-            },
+            type: Number,
 
-            title: {
-                type: String,
-                required: true
-            },
+            required: true
 
-            message: {
-                type: String,
-                required: true
-            },
-
-            roadId: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: "Road",
-                default: null
-            },
-
-            vehicleId: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: "Vehicle",
-                default: null
-            },
-
-            deliveryId: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: "Delivery",
-                default: null
-            },
-
-            status: {
-                type: String,
-                enum: [
-                    "UNREAD",
-                    "READ",
-                    "RESOLVED"
-                ],
-                default: "UNREAD"
-            }
         },
 
-        {
-            timestamps: true
+        longitude: {
+
+            type: Number,
+
+            required: true
+
+        },
+
+        riskCategory: {
+
+            type: String,
+
+            required: true,
+
+            enum: [
+                "High",
+                "Very High"
+            ]
+
+        },
+
+        riskPercentage: {
+
+            type: Number,
+
+            required: true
+
+        },
+
+        message: {
+
+            type: String,
+
+            required: true
+
+        },
+
+        source: {
+
+            type: String,
+
+            required: true,
+
+            enum: [
+                "map-click",
+                "route-check"
+            ]
+
         }
-    );
+
+    }, {
+
+        timestamps:
+            true
+
+    });
+
 
 module.exports =
     mongoose.model(

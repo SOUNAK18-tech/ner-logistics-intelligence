@@ -2,9 +2,9 @@ const Delivery =
     require("../models/Delivery");
 
 
-// =========================
-// GET ALL DELIVERIES
-// =========================
+// ==============================
+// GET ALL
+// ==============================
 
 const getAllDeliveries =
     async (
@@ -15,7 +15,16 @@ const getAllDeliveries =
         try {
 
             const deliveries =
-                await Delivery.find();
+                await Delivery.find()
+
+                .populate(
+                    "vehicleId"
+                )
+
+                .sort({
+                    createdAt: -1
+                });
+
 
             res.status(200).json({
 
@@ -23,6 +32,7 @@ const getAllDeliveries =
 
                 data:
                     deliveries
+
             });
 
         } catch (error) {
@@ -33,14 +43,17 @@ const getAllDeliveries =
 
                 message:
                     error.message
+
             });
+
         }
+
     };
 
 
-// =========================
-// GET DELIVERY BY ID
-// =========================
+// ==============================
+// GET BY ID
+// ==============================
 
 const getDeliveryById =
     async (
@@ -53,7 +66,12 @@ const getDeliveryById =
             const delivery =
                 await Delivery.findById(
                     req.params.id
+                )
+
+                .populate(
+                    "vehicleId"
                 );
+
 
             if (!delivery) {
 
@@ -63,8 +81,11 @@ const getDeliveryById =
 
                     message:
                         "Delivery not found"
+
                 });
+
             }
+
 
             res.status(200).json({
 
@@ -72,6 +93,7 @@ const getDeliveryById =
 
                 data:
                     delivery
+
             });
 
         } catch (error) {
@@ -82,14 +104,17 @@ const getDeliveryById =
 
                 message:
                     error.message
+
             });
+
         }
+
     };
 
 
-// =========================
-// CREATE DELIVERY
-// =========================
+// ==============================
+// CREATE
+// ==============================
 
 const createDelivery =
     async (
@@ -100,12 +125,10 @@ const createDelivery =
         try {
 
             const delivery =
-                new Delivery(
+                await Delivery.create(
                     req.body
                 );
 
-            const savedDelivery =
-                await delivery.save();
 
             res.status(201).json({
 
@@ -115,7 +138,8 @@ const createDelivery =
                     "Delivery created successfully",
 
                 data:
-                    savedDelivery
+                    delivery
+
             });
 
         } catch (error) {
@@ -126,14 +150,17 @@ const createDelivery =
 
                 message:
                     error.message
+
             });
+
         }
+
     };
 
 
-// =========================
-// UPDATE DELIVERY
-// =========================
+// ==============================
+// UPDATE
+// ==============================
 
 const updateDelivery =
     async (
@@ -151,11 +178,16 @@ const updateDelivery =
                     req.body,
 
                     {
+
                         new: true,
 
-                        runValidators: true
+                        runValidators:
+                            true
+
                     }
+
                 );
+
 
             if (!delivery) {
 
@@ -165,8 +197,11 @@ const updateDelivery =
 
                     message:
                         "Delivery not found"
+
                 });
+
             }
+
 
             res.status(200).json({
 
@@ -177,6 +212,7 @@ const updateDelivery =
 
                 data:
                     delivery
+
             });
 
         } catch (error) {
@@ -187,14 +223,17 @@ const updateDelivery =
 
                 message:
                     error.message
+
             });
+
         }
+
     };
 
 
-// =========================
-// DELETE DELIVERY
-// =========================
+// ==============================
+// DELETE
+// ==============================
 
 const deleteDelivery =
     async (
@@ -206,8 +245,11 @@ const deleteDelivery =
 
             const delivery =
                 await Delivery.findByIdAndDelete(
+
                     req.params.id
+
                 );
+
 
             if (!delivery) {
 
@@ -217,8 +259,11 @@ const deleteDelivery =
 
                     message:
                         "Delivery not found"
+
                 });
+
             }
+
 
             res.status(200).json({
 
@@ -226,6 +271,7 @@ const deleteDelivery =
 
                 message:
                     "Delivery deleted successfully"
+
             });
 
         } catch (error) {
@@ -236,8 +282,11 @@ const deleteDelivery =
 
                 message:
                     error.message
+
             });
+
         }
+
     };
 
 

@@ -1,20 +1,17 @@
-// ==============================
-// PAGE NOT FOUND
-// ==============================
-
 exports.pageNotFound =
-    (req, res, next) => {
+    (req, res) => {
 
         res.status(404).json({
+
+            success: false,
+
             message:
                 "Page not found"
+
         });
+
     };
 
-
-// ==============================
-// ERROR HANDLER
-// ==============================
 
 exports.handleError =
     (error, req, res, next) => {
@@ -29,8 +26,12 @@ exports.handleError =
             error.status || 500
         ).json({
 
+            success: false,
+
             message:
                 error.message ||
                 "Internal server error"
+
         });
+
     };

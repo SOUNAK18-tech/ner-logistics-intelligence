@@ -2,9 +2,9 @@ const Setting =
     require("../models/Setting");
 
 
-// =========================
+// ==============================
 // GET SETTINGS
-// =========================
+// ==============================
 
 const getSettings =
     async (
@@ -14,8 +14,17 @@ const getSettings =
 
         try {
 
-            const settings =
+            let settings =
                 await Setting.findOne();
+
+
+            if (!settings) {
+
+                settings =
+                    await Setting.create({});
+
+            }
+
 
             res.status(200).json({
 
@@ -23,6 +32,7 @@ const getSettings =
 
                 data:
                     settings
+
             });
 
         } catch (error) {
@@ -33,14 +43,17 @@ const getSettings =
 
                 message:
                     error.message
+
             });
+
         }
+
     };
 
 
-// =========================
+// ==============================
 // UPDATE SETTINGS
-// =========================
+// ==============================
 
 const updateSettings =
     async (
@@ -58,13 +71,18 @@ const updateSettings =
                     req.body,
 
                     {
+
                         new: true,
 
                         upsert: true,
 
-                        runValidators: true
+                        runValidators:
+                            true
+
                     }
+
                 );
+
 
             res.status(200).json({
 
@@ -75,6 +93,7 @@ const updateSettings =
 
                 data:
                     settings
+
             });
 
         } catch (error) {
@@ -85,8 +104,11 @@ const updateSettings =
 
                 message:
                     error.message
+
             });
+
         }
+
     };
 
 

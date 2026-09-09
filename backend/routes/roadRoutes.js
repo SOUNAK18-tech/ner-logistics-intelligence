@@ -1,62 +1,41 @@
 const express =
     require("express");
 
+const roadController =
+    require(
+        "../controllers/roadController"
+    );
+
+
 const router =
     express.Router();
 
-const {
-    getAllRoads,
-    getRoadById,
-    createRoad,
-    updateRoad,
-    deleteRoad
-} =
-    require("../controllers/roadController");
-
-// =========================
-// GET ALL
-// =========================
 
 router.get(
     "/",
-    getAllRoads
+    roadController.getAllRoads
 );
-
-// =========================
-// GET ONE
-// =========================
 
 router.get(
     "/:id",
-    getRoadById
+    roadController.getRoadById
 );
-
-// =========================
-// CREATE
-// =========================
 
 router.post(
     "/",
-    createRoad
+    roadController.createRoad
 );
-
-// =========================
-// UPDATE
-// =========================
 
 router.put(
     "/:id",
-    updateRoad
+    roadController.updateRoad
 );
-
-// =========================
-// DELETE
-// =========================
 
 router.delete(
     "/:id",
-    deleteRoad
+    roadController.deleteRoad
 );
+
 
 module.exports =
     router;

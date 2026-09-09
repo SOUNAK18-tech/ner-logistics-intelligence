@@ -1,42 +1,41 @@
 const express =
     require("express");
 
+const deliveryController =
+    require(
+        "../controllers/deliveryController"
+    );
+
+
 const router =
     express.Router();
 
-const {
-    getAllDeliveries,
-    getDeliveryById,
-    createDelivery,
-    updateDelivery,
-    deleteDelivery
-} =
-    require("../controllers/deliveryController");
 
 router.get(
     "/",
-    getAllDeliveries
+    deliveryController.getAllDeliveries
 );
 
 router.get(
     "/:id",
-    getDeliveryById
+    deliveryController.getDeliveryById
 );
 
 router.post(
     "/",
-    createDelivery
+    deliveryController.createDelivery
 );
 
 router.put(
     "/:id",
-    updateDelivery
+    deliveryController.updateDelivery
 );
 
 router.delete(
     "/:id",
-    deleteDelivery
+    deliveryController.deleteDelivery
 );
+
 
 module.exports =
     router;
