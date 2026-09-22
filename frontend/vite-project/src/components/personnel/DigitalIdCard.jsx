@@ -10,6 +10,7 @@
 import { useState } from 'react';
 import { Edit2, Trash2, User, Shield, Truck } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { assetUrl } from '../../config';
 
 const STATUS_PILL = {
   Active:           { bg: 'var(--success-bg)', color: 'var(--success)',  border: 'var(--success)' },
@@ -71,7 +72,7 @@ export const DigitalIdCard = ({ person, role, onEdit, onDeleteConfirm }) => {
           {/* Avatar */}
           <div style={{ display: 'flex', alignItems: 'flex-end', gap: 16 }}>
             {person.photoUrl ? (
-              <img src={person.photoUrl} alt="Profile"
+              <img src={assetUrl(person.photoUrl)} alt="Profile"
                 style={{ width: 72, height: 72, borderRadius: '50%', objectFit: 'cover', border: '3px solid rgba(255,255,255,0.8)' }} />
             ) : (
               <div style={{
